@@ -57,6 +57,7 @@
     <Compile Include="Events\IApplicationEvent.cs" />
     <Compile Include="Events\IEventAggregator.cs" />
     <Compile Include="Events\Messages\ExceptionMessage.cs" />
+    <Compile Include="Events\Messages\InfoMessage.cs" />
     <Compile Include="Interfaces\IFileManager.cs" />
     <Compile Include="Interfaces\IPictureProvider.cs" />
     <Compile Include="Interfaces\IService.cs" />

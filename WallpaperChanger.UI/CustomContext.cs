@@ -38,10 +38,15 @@ namespace WallpaperChanger.UI
             EventAggregator.Instance.Subscribe<ExceptionMessage>(e =>
             {
                 this.trayIcon.ShowBalloonTip(5000, "Error Occured", $"An error occured while setting new image: {e.Message}", ToolTipIcon.Error);
+
                 _customMenuItem.Text = "Custom";
                 _customMenuItem.Checked = false;
 
-                ChangeWallPaper();
+            });
+
+            EventAggregator.Instance.Subscribe<InfoMessage>(e =>
+            {
+                this.trayIcon.ShowBalloonTip(5000, "Info", e.Message, ToolTipIcon.Info);
             });
 
             _pw = new UnSplashPictureProvider();
