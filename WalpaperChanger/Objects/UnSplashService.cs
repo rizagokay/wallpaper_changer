@@ -29,7 +29,7 @@ namespace WalpaperChanger.Objects
             var rc = CreateServiceClient();
 
             var rq = new RestRequest("photos/random", Method.GET);
-            rq.AddQueryParameter("featured", "1");
+            //rq.AddQueryParameter("featured", "1");
             rq.AddQueryParameter("query", "architecture");
             rq.AddQueryParameter("client_id", _appSecret);
 
@@ -58,7 +58,7 @@ namespace WalpaperChanger.Objects
             var rc = CreateServiceClient();
 
             var rq = new RestRequest("photos/random", Method.GET);
-            rq.AddQueryParameter("featured", "1");
+            //rq.AddQueryParameter("featured", "1");
             if (query != null)
             {
                 rq.AddQueryParameter("query", query);
@@ -91,7 +91,7 @@ namespace WalpaperChanger.Objects
             var rc = CreateServiceClient();
 
             var rq = new RestRequest("photos/random", Method.GET);
-            rq.AddQueryParameter("featured", "1");
+           // rq.AddQueryParameter("featured", "1");
             if (category.HasValue)
             {
                 rq.AddQueryParameter("query", category.Value.ToString());
