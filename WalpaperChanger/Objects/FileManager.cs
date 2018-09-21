@@ -31,7 +31,7 @@ namespace WalpaperChanger.Objects
 
             if (!File.Exists(jsonPath))
             {
-                var jsonData = JsonConvert.SerializeObject(new JsonProgramData { LastSelectedCategory = "" });
+                var jsonData = JsonConvert.SerializeObject(new JsonProgramData { LastSelectedCategory = "", Settings = new JsonSettings { StartsWithWindows = true, TimeInMinutes = 5 } });
 
                 File.WriteAllText(jsonPath, jsonData);
             }

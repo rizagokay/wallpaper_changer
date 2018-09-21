@@ -49,6 +49,14 @@ namespace WallpaperChanger.UI
                 this.trayIcon.ShowBalloonTip(5000, "Info", e.Message, ToolTipIcon.Info);
             });
 
+            EventAggregator.Instance.Subscribe<SettingsChangedMessage>(e => {
+
+                _wpTimer.Stop();
+                _wpTimer.Interval = e.Runtime * 60 * 1000;
+                _wpTimer.Start();
+
+            });
+
             _pw = new UnSplashPictureProvider();
 
             _wp = new WallPaperChanger();
@@ -57,13 +65,30 @@ namespace WallpaperChanger.UI
 
             _wpTimer = new System.Windows.Forms.Timer();
 
+            var jsonData = _fm.GetProgramData();
+
+            int defaultRuntime = 10;
+
+            if (jsonData != null)
+            {
+                if (jsonData.Settings != null)
+                {
+                    if (jsonData.Settings.TimeInMinutes != 0)
+                    {
+                        defaultRuntime = jsonData.Settings.TimeInMinutes;
+                    }
+                }
+            }
+
             //10 Minutes
-            _wpTimer.Interval = 5 * 60 * 1000;
+            _wpTimer.Interval = defaultRuntime * 60 * 1000;
 
             //Bind Event
             _wpTimer.Tick += _wpTimer_Tick;
 
             _wpTimer.Start();
+
+
 
             _imageMenuItem = new MenuItem("Open Image", OpenImage_Click);
             _pauseResumeItem = new MenuItem("Pause", PauseOrStart);
@@ -88,6 +113,7 @@ namespace WallpaperChanger.UI
                _customMenuItem
                 }),
                _pauseResumeItem,
+                new MenuItem("Settings", Settings_Click),
                 new MenuItem("About", About_Click),
                 new MenuItem("Exit", Exit)
 
@@ -97,7 +123,7 @@ namespace WallpaperChanger.UI
                 Text = "Wallpaper Changer v0.2"
             };
 
-            var jsonData = _fm.GetProgramData();
+            
 
             if (jsonData?.LastSelectedCategory != "")
             {
@@ -125,6 +151,12 @@ namespace WallpaperChanger.UI
         {
             var abt = new AboutForm();
             abt.ShowDialog();
+        }
+
+        void Settings_Click(object sender, EventArgs e)
+        {
+            var stn = new SettingsForm();
+            stn.ShowDialog();
         }
 
         void _wpTimer_Tick(object sender, EventArgs e)
@@ -188,7 +220,11 @@ namespace WallpaperChanger.UI
                 {
                     ChangeWithQuery(frm.Query, sender as MenuItem);
 
-                    _fm.SaveJsonData(new JsonProgramData { LastSelectedCategory = frm.Query });
+                    var jsonData = _fm.GetProgramData();
+
+                    jsonData.LastSelectedCategory = frm.Query;
+
+                    _fm.SaveJsonData(jsonData);
                 }
             }
 
